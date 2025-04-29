@@ -1,0 +1,30 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #f0f8ff;
+}
+
+#game-container {
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+}
+
+#board {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 5px;
+    margin-top: 20px;
+}
+
+#board div {
+    background: #e0e0e0;
+    padding: 20px;
+    font-size: 20px;
+    border-radius: 8px;
+}
