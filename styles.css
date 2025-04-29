@@ -1,30 +1,49 @@
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background: #f0f8ff;
+  font-family: Arial, sans-serif;
+  background: #f0f8ff;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
 }
 
 #game-container {
-    width: 90%;
-    max-width: 400px;
-    text-align: center;
+  width: 90%;
+  max-width: 500px;
+  text-align: center;
 }
 
 #board {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 5px;
-    margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 5px;
+  margin-top: 20px;
 }
 
-#board div {
-    background: #e0e0e0;
-    padding: 20px;
-    font-size: 20px;
-    border-radius: 8px;
+.tile {
+  background: #e0e0e0;
+  padding: 20px;
+  font-size: 20px;
+  border-radius: 8px;
+  user-select: none;
+  transition: background 0.3s;
+}
+
+.tile.selected {
+  background: #87ceeb;
+}
+
+#controls {
+  margin-top: 15px;
+}
+
+button {
+  margin: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+}
+
+#found-words {
+  margin-top: 10px;
+  min-height: 50px;
 }
