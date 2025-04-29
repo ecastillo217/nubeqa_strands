@@ -17,13 +17,24 @@
       <button onclick="useHint()">Hint (3 left)</button>
     </div>
     <div id="current-word"></div>
-    <h2>Found Words</h2>
+    <h2>Found Puzzle Words</h2>
     <div id="found-words"></div>
-    <h2>Bonus Words</h2>
+    <h2>Found Bonus Words</h2>
     <div id="bonus-words"></div>
     <h2>Leaderboard</h2>
     <div id="leaderboard"></div>
   </div>
+
+  <!-- Victory Modal -->
+  <div id="victory-modal" style="display:none;">
+    <h2>🎉 Congratulations! 🎉</h2>
+    <p id="victory-summary"></p>
+    <button onclick="downloadWords()">Download Found Words</button>
+    <button onclick="restartGame()">Play Again</button>
+  </div>
+
+  <!-- Confetti Library -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
