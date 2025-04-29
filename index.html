@@ -1,22 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nubeqa Strands Game</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nubeqa Strands</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="game-container">
-        <h1>Nubeqa Strands</h1>
-        <div id="board"></div>
-        <div id="hints">
-            <button onclick="useHint()">Use Hint</button>
-            <span id="hints-remaining">3 hints left</span>
-        </div>
-        <div id="found-words"></div>
-        <div id="leaderboard"></div>
+  <div id="game-container">
+    <h1>Nubeqa Strands: ARANOTE Launch</h1>
+    <p id="theme">Theme: Prostate Cancer Care</p>
+    <div id="board"></div>
+    <div id="controls">
+      <button onclick="submitWord()">Submit Word</button>
+      <button onclick="useHint()">Hint (3 left)</button>
     </div>
-    <script src="script.js"></script>
+    <div id="current-word"></div>
+    <h2>Found Words</h2>
+    <div id="found-words"></div>
+    <h2>Leaderboard</h2>
+    <div id="leaderboard"></div>
+  </div>
+  <script src="script.js"></script>
 </body>
 </html>
