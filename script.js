@@ -3,6 +3,8 @@ const currentWordDiv = document.getElementById('current-word');
 const foundWordsDiv = document.getElementById('found-words');
 const bonusWordsDiv = document.getElementById('bonus-words');
 const leaderboardDiv = document.getElementById('leaderboard');
+const victoryModal = document.getElementById('victory-modal');
+const victorySummary = document.getElementById('victory-summary');
 
 let selectedTiles = [];
 let selectedWord = "";
@@ -10,7 +12,7 @@ let foundWords = [];
 let bonusWords = [];
 let hintsLeft = 3;
 
-// Puzzle Words (for hints only)
+// Puzzle Words (important for theme)
 const puzzleWords = ["nubeqa", "aranote", "cancer", "treat"];
 
 // Build board letters
@@ -34,7 +36,7 @@ letters.forEach((letter, index) => {
   board.appendChild(tile);
 });
 
-// Select tile with adjacency check
+// Select tile
 function selectTile(tile) {
   const index = parseInt(tile.dataset.index);
   if (tile.classList.contains('selected')) return;
@@ -68,7 +70,7 @@ function submitWord() {
   validateWord(selectedWord.toLowerCase());
 }
 
-// Validate word using public dictionary
+// Validate word using DictionaryAPI
 async function validateWord(word) {
   try {
     const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
@@ -77,7 +79,7 @@ async function validateWord(word) {
         foundWords.push(word.toUpperCase());
         updateFoundWords();
         flashTiles();
-        alert(`Great! You found a puzzle word: ${word}`);
+        alert(`Great! Puzzle word found: ${word}`);
       } else if (!bonusWords.includes(word.toUpperCase())) {
         bonusWords.push(word.toUpperCase());
         updateBonusWords();
@@ -94,7 +96,7 @@ async function validateWord(word) {
   resetSelection();
 }
 
-// Update found puzzle words
+// Update found words
 function updateFoundWords() {
   foundWordsDiv.innerHTML = foundWords.join(', ');
 }
@@ -112,7 +114,7 @@ function resetSelection() {
   currentWordDiv.textContent = "";
 }
 
-// Flash animation
+// Flash tiles on success
 function flashTiles() {
   selectedTiles.forEach(tile => {
     tile.style.backgroundColor = '#90ee90';
@@ -122,7 +124,7 @@ function flashTiles() {
   });
 }
 
-// Timer + Leaderboard
+// Timer and Leaderboard
 let timeLeft = 180;
 let timerInterval;
 
@@ -138,4 +140,22 @@ function startTimer() {
 }
 
 function endGame() {
-  alert(`Time's up! Puzzle Words Found: ${foundWords.length}, Bonus Words Found
+  showVictoryScreen();
+  saveHighScore(foundWords.length + bonusWords.length);
+}
+
+function saveHighScore(score) {
+  const bestScore = localStorage.getItem('nubeqaBestScore') || 0;
+  if (score > bestScore) {
+    localStorage.setItem('nubeqaBestScore', score);
+    alert('New High Score!');
+  }
+  updateLeaderboard();
+}
+
+function updateLeaderboard() {
+  const bestScore = localStorage.getItem('nubeqaBestScore') || 0;
+  leaderboardDiv.innerHTML = `🏆 Best Words Found: ${bestScore}`;
+}
+
+// Victory Screen
