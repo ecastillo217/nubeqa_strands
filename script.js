@@ -1,14 +1,17 @@
 const board = document.getElementById('board');
 const currentWordDiv = document.getElementById('current-word');
 const foundWordsDiv = document.getElementById('found-words');
+const bonusWordsDiv = document.getElementById('bonus-words');
 const leaderboardDiv = document.getElementById('leaderboard');
+
 let selectedTiles = [];
 let selectedWord = "";
 let foundWords = [];
+let bonusWords = [];
 let hintsLeft = 3;
 
-// Words players must find
-const wordsToFind = ["NUBEQA", "ARANOTE", "CANCER", "TREAT"];
+// Puzzle Words (for hints only)
+const puzzleWords = ["nubeqa", "aranote", "cancer", "treat"];
 
 // Build board letters
 let letters = "NUBEQAARANOTECANCER".split('');
@@ -57,35 +60,48 @@ function isAdjacent(index) {
 
 // Submit word
 function submitWord() {
-  if (wordsToFind.includes(selectedWord.toUpperCase()) && !foundWords.includes(selectedWord.toUpperCase())) {
-    foundWords.push(selectedWord.toUpperCase());
-    updateFoundWords();
-    flashTiles();
-    alert(`Great! You found: ${selectedWord}`);
-  } else {
-    alert('Not a valid word.');
+  if (selectedWord.length < 4) {
+    alert('Words must be at least 4 letters.');
+    resetSelection();
+    return;
+  }
+  validateWord(selectedWord.toLowerCase());
+}
+
+// Validate word using public dictionary
+async function validateWord(word) {
+  try {
+    const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
+    if (response.ok) {
+      if (puzzleWords.includes(word) && !foundWords.includes(word.toUpperCase())) {
+        foundWords.push(word.toUpperCase());
+        updateFoundWords();
+        flashTiles();
+        alert(`Great! You found a puzzle word: ${word}`);
+      } else if (!bonusWords.includes(word.toUpperCase())) {
+        bonusWords.push(word.toUpperCase());
+        updateBonusWords();
+        flashTiles();
+        alert(`Bonus word found: ${word}`);
+      }
+    } else {
+      alert('Not a valid English word.');
+    }
+  } catch (error) {
+    console.error('Error validating word:', error);
+    alert('Problem validating word.');
   }
   resetSelection();
 }
 
-// Use hint
-function useHint() {
-  if (hintsLeft > 0) {
-    const remainingWords = wordsToFind.filter(word => !foundWords.includes(word));
-    if (remainingWords.length > 0) {
-      const hintWord = remainingWords[Math.floor(Math.random() * remainingWords.length)];
-      alert(`Hint: The word starts with "${hintWord.charAt(0)}"`);
-      hintsLeft--;
-      document.querySelector('button[onclick="useHint()"]').textContent = `Hint (${hintsLeft} left)`;
-    }
-  } else {
-    alert('No hints left!');
-  }
-}
-
-// Update found words
+// Update found puzzle words
 function updateFoundWords() {
   foundWordsDiv.innerHTML = foundWords.join(', ');
+}
+
+// Update bonus words
+function updateBonusWords() {
+  bonusWordsDiv.innerHTML = bonusWords.join(', ');
 }
 
 // Reset selection
@@ -114,7 +130,6 @@ function startTimer() {
   timerInterval = setInterval(() => {
     timeLeft--;
     document.getElementById('timer').textContent = `Time Left: ${timeLeft}s`;
-
     if (timeLeft <= 0) {
       clearInterval(timerInterval);
       endGame();
@@ -123,25 +138,4 @@ function startTimer() {
 }
 
 function endGame() {
-  alert(`Time's up! You found ${foundWords.length} words.`);
-  saveHighScore(foundWords.length);
-}
-
-function saveHighScore(score) {
-  const bestScore = localStorage.getItem('nubeqaBestScore') || 0;
-  if (score > bestScore) {
-    localStorage.setItem('nubeqaBestScore', score);
-    alert('New High Score!');
-  }
-  updateLeaderboard();
-}
-
-function updateLeaderboard() {
-  const bestScore = localStorage.getItem('nubeqaBestScore') || 0;
-  leaderboardDiv.innerHTML = `🏆 Best Words Found: ${bestScore}`;
-}
-
-// Initialize
-startTimer();
-updateLeaderboard();
-
+  alert(`Time's up! Puzzle Words Found: ${foundWords.length}, Bonus Words Found
