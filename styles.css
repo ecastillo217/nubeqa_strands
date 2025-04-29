@@ -63,7 +63,7 @@ button:hover {
   background: #005bb5;
 }
 
-#current-word, #found-words, #leaderboard {
+#current-word, #found-words, #bonus-words, #leaderboard {
   margin-top: 10px;
   min-height: 30px;
 }
